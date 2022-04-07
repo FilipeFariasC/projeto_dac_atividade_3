@@ -14,7 +14,7 @@ public class Setup {
 	    return new ModelMapper();
 	}
 	
-	//*
+	/*
 	@Bean
 	public MessageSource messageSource() {
 	    ReloadableResourceBundleMessageSource messageSource
@@ -28,7 +28,6 @@ public class Setup {
 	    
 	    return messageSource;
 	}
-	/*
 	@Bean
 	public LocalValidatorFactoryBean getValidator() {
 	    LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
