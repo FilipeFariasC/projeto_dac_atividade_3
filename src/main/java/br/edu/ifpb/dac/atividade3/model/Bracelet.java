@@ -1,4 +1,4 @@
-package br.edu.ifpb.dac.atividade_3.model;
+package br.edu.ifpb.dac.atividade3.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -1,4 +1,4 @@
-package br.edu.ifpb.dac.atividade_3.config;
+package br.edu.ifpb.dac.atividade3.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,0 +1,4 @@
+javax.validation.constraints.NotNull.message={0} is arbitrary.
+javax.validation.constraints.Size.message={0} must have a size between {min} and {max}.
+javax.validation.constraints.NotEmpty.message={0} must contain one or more characters.
+javax.validation.constraints.NotBlank.message={0} must contain one or more characters ignoring blank space.
