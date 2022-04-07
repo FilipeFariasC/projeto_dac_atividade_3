@@ -59,7 +59,7 @@ public class UserResource {
 			@Valid 
 			@RequestBody UserPostDto userPostDto,
 			HttpServletResponse response){
-		UserDto created = userService.createOrUpdate(userPostDto);
+		UserDto created = userService.create(userPostDto);
 		
 		// cria o uri locator do novo usuario
 		URI uri = ServletUriComponentsBuilder
@@ -77,14 +77,13 @@ public class UserResource {
 	 */
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(
-//			@Valid 
+			@Valid 
 			@RequestBody 
 			UserPostDto userPostDto, @PathVariable("id") Long id){
-		if(userService.findById(id) == null) {
+		UserDto updated = userService.update(id, userPostDto);
+		if(updated == null) {
 			return ResponseEntity.notFound().build();
 		}
-		
-		UserDto updated = userService.createOrUpdate(userPostDto);
 		return ResponseEntity.ok(updated);
 	}
 	@DeleteMapping("/{id}")

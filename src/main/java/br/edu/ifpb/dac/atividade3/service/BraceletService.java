@@ -20,7 +20,7 @@ public class BraceletService {
 	@Autowired
 	private ModelMapper braceletMapper;
 	
-	public BraceletDto createOrUpdate(BraceletPostDto braceletPostDto) {
+	public BraceletDto create(BraceletPostDto braceletPostDto) {
 		Bracelet created = braceletRepo.save(braceletMapper.map(braceletPostDto, Bracelet.class));
 		
 		return braceletMapper.map(created, BraceletDto.class);
@@ -40,6 +40,16 @@ public class BraceletService {
 		return bracelet.isPresent() ? 
 				braceletMapper.map(bracelet.get(), BraceletDto.class) : null;
 	}
+	public BraceletDto update(Long id, BraceletPostDto update) {
+		if(braceletRepo.findById(id).isEmpty())
+			return null;
+		
+		Bracelet bracelet = braceletMapper.map(update, Bracelet.class);
+		bracelet.setId(id);
+		
+		return braceletMapper.map(bracelet, BraceletDto.class);
+	}
+	
 	public void delete(Bracelet bracelet) {
 		braceletRepo.delete(bracelet);
 	}

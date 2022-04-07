@@ -9,13 +9,13 @@ public class BraceletPostDto {
 	@NotNull
 	@NotEmpty
 	@NotBlank
-	private String nome;
+	private String name;
 	
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setNome(String name) {
+		this.name = name;
 	}
 	
 }

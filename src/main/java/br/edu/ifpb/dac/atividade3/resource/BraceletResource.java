@@ -47,7 +47,7 @@ public class BraceletResource {
 	public ResponseEntity<?> getUser(@PathVariable Long id){
 		BraceletDto bracelet = braceletService.findById(id);
 		
-		return bracelet == null ? ResponseEntity.ok(bracelet) : ResponseEntity.notFound().build();
+		return bracelet == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(bracelet);
 	}
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
@@ -55,7 +55,7 @@ public class BraceletResource {
 			@Valid @RequestBody BraceletPostDto braceletPostDto,
 			HttpServletResponse response
 			){
-		BraceletDto created = braceletService.createOrUpdate(braceletPostDto);
+		BraceletDto created = braceletService.create(braceletPostDto);
 		
 		// cria o uri locator da nova pulseira
 		URI uri = ServletUriComponentsBuilder
@@ -72,11 +72,9 @@ public class BraceletResource {
 //			@Valid
 			@RequestBody BraceletPostDto braceletDto, 
 			@PathVariable("id") Long id){
-		if(braceletService.findById(id) == null) {
-			return ResponseEntity.notFound().build();
-		}
-		BraceletDto updated = braceletService.createOrUpdate(braceletDto);
-		return ResponseEntity.ok(updated);
+		BraceletDto updated = braceletService.update(id, braceletDto);
+		
+		return (updated == null) ? ResponseEntity.notFound().build() : ResponseEntity.ok(updated);
 	}
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id){

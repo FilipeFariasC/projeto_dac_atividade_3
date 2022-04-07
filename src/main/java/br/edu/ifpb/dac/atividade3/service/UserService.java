@@ -21,7 +21,7 @@ public class UserService{
 	@Autowired
 	private ModelMapper userMapper;
 	
-	public UserDto createOrUpdate(UserPostDto userDto) {
+	public UserDto create(UserPostDto userDto) {
 		User created = userRepo.save(userMapper.map(userDto, User.class));
 		
 		return userMapper.map(created, UserDto.class);
@@ -40,6 +40,17 @@ public class UserService{
 
 		return user.isPresent()? userMapper.map(user.get(), UserDto.class): null;
 	}
+	
+	public UserDto update(Long id, UserPostDto userPostDto) {	
+		if(userRepo.findById(id).isEmpty())
+			return null;
+		
+		User update = userMapper.map(userPostDto, User.class);
+		update.setId(id);
+		
+		return userMapper.map(userRepo.save(update), UserDto.class);
+	}
+	
 	public void delete(User user) {
 		userRepo.delete(user);
 	}
