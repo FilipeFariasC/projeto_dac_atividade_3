@@ -55,9 +55,11 @@ public class UserResource {
 	public ResponseEntity<?> getUser(@PathVariable Long id){
 		User user = userService.findById(id);
 		
+		if(user == null)
+			return ResponseEntity.notFound().build();
 		UserDto dto = mapToDto(user);
 		
-		return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(dto);
+		return  ResponseEntity.ok(dto);
 	}
 	/*
 	 * Recebe um usuário válido e uma response
@@ -77,6 +79,7 @@ public class UserResource {
 				.path("/{id}")
 				.buildAndExpand(created.getId())
 				.toUri();
+		
 		response.setHeader("Location", uri.toASCIIString());
 		
 		UserDto dto = mapToDto(created);

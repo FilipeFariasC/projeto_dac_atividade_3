@@ -55,9 +55,12 @@ public class BraceletResource {
 	public ResponseEntity<?> getUser(@PathVariable Long id){
 		Bracelet bracelet = braceletService.findById(id);
 		
+		if(bracelet == null)
+			ResponseEntity.notFound().build();
+			
 		BraceletDto braceletDto = mapToDto(bracelet);
 		
-		return bracelet == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(braceletDto);
+		return ResponseEntity.ok(braceletDto);
 	}
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
