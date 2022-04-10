@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.edu.ifpb.dac.atividade3.dto.UserDto;
 import br.edu.ifpb.dac.atividade3.dto.UserPostDto;
+import br.edu.ifpb.dac.atividade3.model.User;
 import br.edu.ifpb.dac.atividade3.service.UserService;
 
 @RestController
@@ -31,13 +33,19 @@ public class UserResource {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private ModelMapper userMapper;
+	
 	/*
 	 *  se houver usuários, retorna os usuários.
 	 *  se não houver, retorna uma lista vazia.
 	*/
 	@GetMapping
 	public List<UserDto> get(){
-		return userService.getAll();
+		return userService.getAll()
+				.stream()
+				.map(this::mapToDto)
+				.toList();
 	}
 	/*
 	 * Se houver um usuário com esse id, retorna 200 OK e o usuário no corpo da resposta
@@ -45,9 +53,11 @@ public class UserResource {
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getUser(@PathVariable Long id){
-		UserDto user = userService.findById(id);
+		User user = userService.findById(id);
 		
-		return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
+		UserDto dto = mapToDto(user);
+		
+		return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(dto);
 	}
 	/*
 	 * Recebe um usuário válido e uma response
@@ -59,7 +69,7 @@ public class UserResource {
 			@Valid 
 			@RequestBody UserPostDto userPostDto,
 			HttpServletResponse response){
-		UserDto created = userService.create(userPostDto);
+		User created = userService.create(userPostDto);
 		
 		// cria o uri locator do novo usuario
 		URI uri = ServletUriComponentsBuilder
@@ -69,7 +79,9 @@ public class UserResource {
 				.toUri();
 		response.setHeader("Location", uri.toASCIIString());
 		
-		return ResponseEntity.created(uri).body(created);
+		UserDto dto = mapToDto(created);
+		
+		return ResponseEntity.created(uri).body(dto);
 	}
 	
 	/*
@@ -80,16 +92,28 @@ public class UserResource {
 			@Valid 
 			@RequestBody 
 			UserPostDto userPostDto, @PathVariable("id") Long id){
-		UserDto updated = userService.update(id, userPostDto);
+		User updated = userService.update(id, userPostDto);
 		if(updated == null) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(updated);
+		
+		UserDto dto = mapToDto(updated);
+		
+		return ResponseEntity.ok(dto);
 	}
+	
+	/**
+	 * Deleta o usuário com o id parâmetro.
+	 * @param id
+	 * @return
+	 */
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delete(@PathVariable Long id){
+	public ResponseEntity<?> delete(@PathVariable("id") Long id){
 		return userService.deleteById(id) ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
 	}
 	
+	private UserDto mapToDto(User user) {
+		return userMapper.map(user, UserDto.class);
+	}
 	
 }

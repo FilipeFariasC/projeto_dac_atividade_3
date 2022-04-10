@@ -7,7 +7,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.edu.ifpb.dac.atividade3.dto.UserDto;
 import br.edu.ifpb.dac.atividade3.dto.UserPostDto;
 import br.edu.ifpb.dac.atividade3.model.User;
 import br.edu.ifpb.dac.atividade3.repository.UserRepository;
@@ -21,34 +20,31 @@ public class UserService{
 	@Autowired
 	private ModelMapper userMapper;
 	
-	public UserDto create(UserPostDto userDto) {
+	public User create(UserPostDto userDto) {
 		User created = userRepo.save(userMapper.map(userDto, User.class));
 		
-		return userMapper.map(created, UserDto.class);
+		return created;
 	}
 	
-	public List<UserDto> getAll() {
+	public List<User> getAll() {
 		List<User> users = userRepo.findAll();
 
-		return users
-				.stream()
-				.map((user) -> userMapper.map(user, UserDto.class))
-				.toList();
+		return users;
 	}
-	public UserDto findById(Long id){
+	public User findById(Long id){
 		Optional<User> user = userRepo.findById(id);
 
-		return user.isPresent()? userMapper.map(user.get(), UserDto.class): null;
+		return user.isPresent()? user.get(): null;
 	}
 	
-	public UserDto update(Long id, UserPostDto userPostDto) {	
+	public User update(Long id, UserPostDto userPostDto) {	
 		if(userRepo.findById(id).isEmpty())
 			return null;
 		
 		User update = userMapper.map(userPostDto, User.class);
 		update.setId(id);
 		
-		return userMapper.map(userRepo.save(update), UserDto.class);
+		return userRepo.save(update);
 	}
 	
 	public void delete(User user) {

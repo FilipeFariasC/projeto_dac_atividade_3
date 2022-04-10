@@ -20,34 +20,30 @@ public class BraceletService {
 	@Autowired
 	private ModelMapper braceletMapper;
 	
-	public BraceletDto create(BraceletPostDto braceletPostDto) {
+	public Bracelet create(BraceletPostDto braceletPostDto) {
 		Bracelet created = braceletRepo.save(braceletMapper.map(braceletPostDto, Bracelet.class));
 		
-		return braceletMapper.map(created, BraceletDto.class);
+		return created;
 	}
 	
-	public List<BraceletDto> getAll() {
+	public List<Bracelet> getAll() {
 		List<Bracelet> bracelets = braceletRepo.findAll();
 		
-		return bracelets
-				.stream()
-				.map((bracelet) -> braceletMapper.map(bracelet, BraceletDto.class))
-				.toList();
+		return bracelets;
 	}
-	public BraceletDto findById(Long id){
+	public Bracelet findById(Long id){
 		Optional<Bracelet> bracelet = braceletRepo.findById(id);
 
-		return bracelet.isPresent() ? 
-				braceletMapper.map(bracelet.get(), BraceletDto.class) : null;
+		return bracelet.isPresent() ? bracelet.get(): null;
 	}
-	public BraceletDto update(Long id, BraceletPostDto update) {
+	public Bracelet update(Long id, BraceletPostDto update) {
 		if(braceletRepo.findById(id).isEmpty())
 			return null;
 		
 		Bracelet bracelet = braceletMapper.map(update, Bracelet.class);
 		bracelet.setId(id);
 		
-		return braceletMapper.map(bracelet, BraceletDto.class);
+		return braceletRepo.save(bracelet);
 	}
 	
 	public void delete(Bracelet bracelet) {
