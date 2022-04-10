@@ -97,6 +97,7 @@ public class UserResource {
 			@RequestBody 
 			UserPostDto userPostDto, @PathVariable("id") Long id){
 		User updated = userService.update(id, userPostDto);
+		
 		if(updated == null) {
 			return ResponseEntity.notFound().build();
 		}

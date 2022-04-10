@@ -41,7 +41,7 @@ public class BraceletResource {
 	 *  se não houver, retorna uma lista vazia.
 	 */
 	@GetMapping
-	public List<BraceletDto> get(){
+	public List<BraceletDto> getAll(){
 		return braceletService.getAll()
 				.stream()
 				.map(this::mapToDto)
@@ -52,11 +52,11 @@ public class BraceletResource {
 	 * Se não houver, retorna um 404 Not Found
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getUser(@PathVariable Long id){
+	public ResponseEntity<?> getBraceletById(@PathVariable("id") Long id){
 		Bracelet bracelet = braceletService.findById(id);
 		
 		if(bracelet == null)
-			ResponseEntity.notFound().build();
+			return ResponseEntity.notFound().build();
 			
 		BraceletDto braceletDto = mapToDto(bracelet);
 		
