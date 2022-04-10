@@ -57,6 +57,7 @@ public class UserResource {
 		
 		if(user == null)
 			return ResponseEntity.notFound().build();
+		
 		UserDto dto = mapToDto(user);
 		
 		return  ResponseEntity.ok(dto);

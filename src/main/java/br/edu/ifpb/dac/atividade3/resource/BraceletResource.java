@@ -90,9 +90,12 @@ public class BraceletResource {
 		
 		Bracelet updated = braceletService.update(id, braceletDto);
 		
+		if(updated == null)
+			return ResponseEntity.notFound().build();
+		
 		BraceletDto dto = mapToDto(updated);
 		
-		return (updated == null) ? ResponseEntity.notFound().build() : ResponseEntity.ok(dto);
+		return ResponseEntity.ok(dto);
 	}
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id){
